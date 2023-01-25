@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "firstapp",
-    "slug": "firstapp",
+    "slug": "harjoitus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "203d3a04-cc87-4659-8a3f-132d300c0fc7"
+      }
+    },
+    "owner": "alfrooster"
   }
 }

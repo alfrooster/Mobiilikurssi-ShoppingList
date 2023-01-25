@@ -1,40 +1,41 @@
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import React, {useState} from 'react';
+import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
+import React, {useState, useEffect} from 'react';
 
 export default function App() {
-  const [num1, setNum1] = useState('');
-  const [num2, setNum2] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [randomInt, setRandomInt] = useState('');
+  const [guess, setGuess] = useState('');
+  const [count, setCount] = useState(1);
 
-  const sum = () => {
-    setAnswer(num1 + num2);
-  }
+  useEffect( () => {
+    setRandomInt(Math.floor(Math.random() * 100 + 1));
+  }, []);
 
-  const sub = () => {
-    setAnswer(num1 - num2);
+  const play = () => {
+    if (guess == randomInt) {
+      Alert.alert('Wow!', 'You guessed the number in ' + count + ' guesses!');
+      setRandomInt(Math.floor(Math.random() * 100 + 1));
+      setCount(1);
+    } else if (guess < randomInt) {
+      Alert.alert('Wrong guess!', 'The number is larger than ' + guess);
+      setCount(count + 1);
+    } else if (guess > randomInt) {
+      Alert.alert('Wrong guess!', 'The number is smaller than ' + guess);
+      setCount(count + 1);
+    } else {
+      Alert.alert('Error', 'Something went wrong. Did you input a number?');
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 20}}>Result: {answer}</Text>
+      <Text style={{fontSize: 20}}>Guess a number between 1-100</Text>
       <TextInput
         style={{width: 200, borderColor: 'gray', borderWidth: 1, fontSize: 20}}
-        onChangeText={text => setNum1(Number(text))}
-        value={num1}
-        placeholder="Number 1"
+        onChangeText={text => setGuess(Number(text))}
+        value={guess}
         keyboardType="numeric"
       />
-      <TextInput
-        style={{width: 200, borderColor: 'gray', borderWidth: 1, fontSize: 20}}
-        onChangeText={text => setNum2(Number(text))}
-        value={num2}
-        placeholder="Number 2"
-        keyboardType="numeric"
-      />
-      <View style={{width: 60, flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Button onPress={sum} title="+"></Button>
-        <Button onPress={sub} title="-"></Button>
-      </View>
+      <Button onPress={play} title="Make guess"></Button>
     </View>
   );
 }

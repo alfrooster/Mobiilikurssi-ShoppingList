@@ -2,49 +2,32 @@ import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-nativ
 import React, {useState} from 'react';
 
 export default function App() {
-  const [num1, setNum1] = useState('');
-  const [num2, setNum2] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [calcs, setCalcs] = useState([]);
+  const [food, setFood] = useState('');
+  const [list, setList] = useState([]);
 
-  const sum = () => {
-    const nextAnswer = num1 + num2;
-    setAnswer(nextAnswer);
-    const nextCalc = num1 + ' + ' + num2 + ' = ' + nextAnswer
-    setCalcs([...calcs, {key: nextCalc}]);
+  const addFood = () => {
+    setList([...list, {key: food}]);
+    setFood('');
   }
 
-  const sub = () => {
-    const nextAnswer = num1 - num2;
-    setAnswer(nextAnswer);
-    const nextCalc = num1 + ' - ' + num2 + ' = ' + nextAnswer
-    setCalcs([...calcs, {key: nextCalc}]);
+  const clearList = () => {
+    setList([]);
   }
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 20}}>Result: {answer}</Text>
       <TextInput
-        style={{width: 200, borderColor: 'gray', borderWidth: 1, fontSize: 20}}
-        onChangeText={text => setNum1(Number(text))}
-        value={num1}
-        placeholder="Number 1"
-        keyboardType="numeric"
+        style={{width: 200, borderColor: 'gray', borderWidth: 1, marginTop: 100}}
+        onChangeText={text => setFood(text)}
+        value={food}
       />
-      <TextInput
-        style={{width: 200, borderColor: 'gray', borderWidth: 1, fontSize: 20}}
-        onChangeText={text => setNum2(Number(text))}
-        value={num2}
-        placeholder="Number 2"
-        keyboardType="numeric"
-      />
-      <View style={{width: 60, flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Button onPress={sum} title="+"></Button>
-        <Button onPress={sub} title="-"></Button>
+      <View style={{width: 120, flexDirection: 'row', justifyContent: 'space-between', margin: 20}}>
+        <Button onPress={addFood} title="Add"></Button>
+        <Button onPress={clearList} title="Clear"></Button>
       </View>
-      <Text>History</Text>
+      <Text style={{color: '#0000ff', fontSize: 20}}>Shopping List</Text>
       <FlatList
-        data={calcs}
+        data={list}
         renderItem={({item}) => <Text>{item.key}</Text>}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -58,6 +41,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100
   },
 });

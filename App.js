@@ -1,41 +1,53 @@
-import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import React, {useState} from 'react';
 
 export default function App() {
-  const [randomInt, setRandomInt] = useState('');
-  const [guess, setGuess] = useState('');
-  const [count, setCount] = useState(1);
+  const [num1, setNum1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [calcs, setCalcs] = useState([]);
 
-  useEffect( () => {
-    setRandomInt(Math.floor(Math.random() * 100 + 1));
-  }, []);
+  const sum = () => {
+    const nextAnswer = num1 + num2;
+    setAnswer(nextAnswer);
+    const nextCalc = num1 + ' + ' + num2 + ' = ' + nextAnswer
+    setCalcs([...calcs, {key: nextCalc}]);
+  }
 
-  const play = () => {
-    if (guess == randomInt) {
-      Alert.alert('Wow!', 'You guessed the number in ' + count + ' guesses!');
-      setRandomInt(Math.floor(Math.random() * 100 + 1));
-      setCount(1);
-    } else if (guess < randomInt) {
-      Alert.alert('Wrong guess!', 'The number is larger than ' + guess);
-      setCount(count + 1);
-    } else if (guess > randomInt) {
-      Alert.alert('Wrong guess!', 'The number is smaller than ' + guess);
-      setCount(count + 1);
-    } else {
-      Alert.alert('Error', 'Something went wrong. Did you input a number?');
-    }
+  const sub = () => {
+    const nextAnswer = num1 - num2;
+    setAnswer(nextAnswer);
+    const nextCalc = num1 + ' - ' + num2 + ' = ' + nextAnswer
+    setCalcs([...calcs, {key: nextCalc}]);
   }
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 20}}>Guess a number between 1-100</Text>
+      <Text style={{fontSize: 20}}>Result: {answer}</Text>
       <TextInput
         style={{width: 200, borderColor: 'gray', borderWidth: 1, fontSize: 20}}
-        onChangeText={text => setGuess(Number(text))}
-        value={guess}
+        onChangeText={text => setNum1(Number(text))}
+        value={num1}
+        placeholder="Number 1"
         keyboardType="numeric"
       />
-      <Button onPress={play} title="Make guess"></Button>
+      <TextInput
+        style={{width: 200, borderColor: 'gray', borderWidth: 1, fontSize: 20}}
+        onChangeText={text => setNum2(Number(text))}
+        value={num2}
+        placeholder="Number 2"
+        keyboardType="numeric"
+      />
+      <View style={{width: 60, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Button onPress={sum} title="+"></Button>
+        <Button onPress={sub} title="-"></Button>
+      </View>
+      <Text>History</Text>
+      <FlatList
+        data={calcs}
+        renderItem={({item}) => <Text>{item.key}</Text>}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </View>
   );
 }
@@ -46,5 +58,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 100
   },
 });
